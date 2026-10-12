@@ -1,0 +1,165 @@
+# TrailHunter Detection Rules
+# Each rule requires: id, name, description, condition (field/operator/value), severity
+# Optional: mitre (ATT&CK technique ID), logic (AND/OR for multi-condition rules)
+
+- id: TH-001
+  name: Root Account Usage
+  description: Any API activity performed directly by the AWS root account.
+  severity: critical
+  mitre: T1078.004
+  condition:
+    field: actor_type
+    operator: equals
+    value: Root
+
+- id: TH-002
+  name: Console Login Without MFA
+  description: IAM user logged into the AWS Console without MFA.
+  severity: high
+  mitre: T1078
+  logic: AND
+  condition:
+    - field: event_name
+      operator: equals
+      value: ConsoleLogin
+    - field: _raw.additionalEventData.MFAUsed
+      operator: equals
+      value: "No"
+
+- id: TH-003
+  name: Failed Console Login
+  description: Failed AWS Management Console login attempt.
+  severity: medium
+  mitre: T1110
+  logic: AND
+  condition:
+    - field: event_name
+      operator: equals
+      value: ConsoleLogin
+    - field: error_message
+      operator: contains
+      value: Failed authentication
+
+- id: TH-004
+  name: IAM Policy Attached to User
+  description: Detects direct IAM policy attachment to a user (privilege escalation risk).
+  severity: high
+  mitre: T1098
+  condition:
+    field: event_name
+    operator: equals
+    value: AttachUserPolicy
+
+- id: TH-005
+  name: New IAM User Created
+  description: A new IAM user account was created.
+  severity: medium
+  mitre: T1136.003
+  condition:
+    field: event_name
+    operator: equals
+    value: CreateUser
+
+- id: TH-006
+  name: IAM Access Key Created
+  description: New programmatic access key issued — may indicate credential harvesting.
+  severity: medium
+  mitre: T1528
+  condition:
+    field: event_name
+    operator: equals
+    value: CreateAccessKey
+
+- id: TH-007
+  name: CloudTrail Logging Disabled
+  description: CloudTrail trail was stopped, disabling audit logging.
+  severity: critical
+  mitre: T1562.008
+  condition:
+    field: event_name
+    operator: equals
+    value: StopLogging
+
+- id: TH-008
+  name: S3 Bucket ACL Made Public
+  description: S3 bucket permissions changed to allow public access.
+  severity: high
+  mitre: T1530
+  logic: AND
+  condition:
+    - field: event_name
+      operator: in
+      value: [PutBucketAcl, PutBucketPolicy]
+    - field: event_source
+      operator: equals
+      value: s3.amazonaws.com
+
+- id: TH-009
+  name: Security Group Rule Opened to Internet
+  description: EC2 security group ingress rule added allowing 0.0.0.0/0.
+  severity: high
+  mitre: T1562.007
+  condition:
+    field: event_name
+    operator: equals
+    value: AuthorizeSecurityGroupIngress
+
+- id: TH-010
+  name: AWS Config Rule Deleted
+  description: AWS Config rule deleted, degrading compliance visibility.
+  severity: high
+  mitre: T1562
+  condition:
+    field: event_name
+    operator: equals
+    value: DeleteConfigRule
+
+- id: TH-011
+  name: GuardDuty Detector Disabled
+  description: Amazon GuardDuty threat detection disabled in a region.
+  severity: critical
+  mitre: T1562
+  condition:
+    field: event_name
+    operator: equals
+    value: DeleteDetector
+
+- id: TH-012
+  name: Cross-Account Role Assumed
+  description: AssumeRole called from a different AWS account than the role owner.
+  severity: medium
+  mitre: T1078.004
+  condition:
+    field: event_name
+    operator: equals
+    value: AssumeRole
+
+- id: TH-013
+  name: Secrets Manager Secret Accessed
+  description: An AWS Secrets Manager secret value was retrieved.
+  severity: medium
+  mitre: T1552.001
+  condition:
+    field: event_name
+    operator: equals
+    value: GetSecretValue
+
+- id: TH-014
+  name: EC2 Instance Snapshot Created
+  description: EBS snapshot created — potential data exfiltration via snapshot sharing.
+  severity: low
+  mitre: T1537
+  condition:
+    field: event_name
+    operator: equals
+    value: CreateSnapshot
+
+- id: TH-015
+  name: Lambda Function Created or Updated
+  description: Lambda function deployed or updated — watch for persistence via Lambda.
+  severity: low
+  mitre: T1525
+  condition:
+    field: event_name
+    operator: in
+    value: [CreateFunction20150331, UpdateFunctionCode20150331v2]

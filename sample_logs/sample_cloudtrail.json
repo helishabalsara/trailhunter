@@ -1,0 +1,88 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "Root",
+        "principalId": "123456789012",
+        "arn": "arn:aws:iam::123456789012:root",
+        "accountId": "123456789012"
+      },
+      "eventTime": "2024-11-15T10:23:01Z",
+      "eventSource": "signin.amazonaws.com",
+      "eventName": "ConsoleLogin",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.42",
+      "userAgent": "Mozilla/5.0",
+      "requestParameters": null,
+      "responseElements": { "ConsoleLogin": "Success" },
+      "additionalEventData": { "MFAUsed": "No" },
+      "requestID": "abc123",
+      "eventID": "evt-001",
+      "readOnly": false
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDABC123",
+        "arn": "arn:aws:iam::123456789012:user/devops",
+        "accountId": "123456789012",
+        "userName": "devops"
+      },
+      "eventTime": "2024-11-15T11:05:22Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "CreateUser",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "10.0.0.5",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": { "userName": "new-service-account" },
+      "responseElements": {},
+      "requestID": "def456",
+      "eventID": "evt-002",
+      "readOnly": false
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDABC456",
+        "arn": "arn:aws:iam::123456789012:user/admin",
+        "accountId": "123456789012",
+        "userName": "admin"
+      },
+      "eventTime": "2024-11-15T12:00:00Z",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventName": "StopLogging",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.10",
+      "userAgent": "aws-sdk-python/1.34.0",
+      "requestParameters": { "name": "arn:aws:cloudtrail:us-east-1:123456789012:trail/main-trail" },
+      "responseElements": null,
+      "requestID": "ghi789",
+      "eventID": "evt-003",
+      "readOnly": false
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDABC789",
+        "arn": "arn:aws:iam::123456789012:user/developer",
+        "accountId": "123456789012",
+        "userName": "developer"
+      },
+      "eventTime": "2024-11-15T13:30:00Z",
+      "eventSource": "secretsmanager.amazonaws.com",
+      "eventName": "GetSecretValue",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "10.0.0.20",
+      "userAgent": "aws-sdk-python/1.34.0",
+      "requestParameters": { "secretId": "prod/db/password" },
+      "responseElements": null,
+      "requestID": "jkl012",
+      "eventID": "evt-004",
+      "readOnly": true
+    }
+  ]
+}

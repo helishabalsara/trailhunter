@@ -1,0 +1,27 @@
+aws:
+  region: us-east-1
+  # Leave blank to use environment variables / IAM role
+  access_key_id: ""
+  secret_access_key: ""
+
+cloudtrail:
+  # For S3 source: bucket name and key prefix
+  bucket: ""
+  prefix: "AWSLogs/"
+  # For live API source: max events to lookup
+  max_results: 1000
+  # Look back window in hours (for live API)
+  lookback_hours: 24
+
+output:
+  format: json          # json or text
+  file: alerts.json     # leave blank for stdout only
+  verbose: false
+
+baseliner:
+  # Minimum events needed before baselining kicks in
+  min_events_threshold: 10
+  # Anomaly detection: std deviations above mean to flag
+  std_dev_threshold: 3.0
+
+rules_dir: trailhunter/rules/
